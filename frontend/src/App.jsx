@@ -41,7 +41,7 @@ export default function App() {
           <div style={{fontSize:'11px', color:'#475569', fontWeight:'600', marginBottom:'8px', textTransform:'uppercase', letterSpacing:'0.05em'}}>System Status</div>
           <div style={{display:'flex', alignItems:'center', gap:'8px'}}>
             <div style={{width:'8px', height:'8px', borderRadius:'50%', background:'#10b981', boxShadow:'0 0 8px #10b981', animation:'pulse-glow 2s infinite'}}></div>
-            <span style={{fontSize:'13px', color:'#34d399', fontWeight:'600'}}>API Running :8000</span>
+            <span style={{fontSize:'13px', color:'#34d399', fontWeight:'600'}}>API Running: Live</span>
           </div>
           <div style={{fontSize:'11px', color:'#334155', marginTop:'6px'}}>FastAPI + PostgreSQL</div>
         </div>
