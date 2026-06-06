@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-const API = 'http://127.0.0.1:8000'
+const API = 'https://inventory-system-k8a4.onrender.com'
 const init = { name:'', email:'', phone:'' }
 const colors = ['#6366f1','#10b981','#f59e0b','#06b6d4','#ec4899','#8b5cf6','#f97316']
 

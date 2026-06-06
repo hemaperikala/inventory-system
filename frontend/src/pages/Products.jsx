@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-const API = 'http://127.0.0.1:8000'
+const API = 'https://inventory-system-k8a4.onrender.com'
 const init = { name:'', sku:'', description:'', price:'', stock:'' }
 
 export default function Products() {
