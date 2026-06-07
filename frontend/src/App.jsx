@@ -14,7 +14,7 @@ const nav = [
 
 export default function App() {
   const [page, setPage] = useState('dashboard')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768)
 
   const navigate = (id) => {
     setPage(id)
@@ -45,7 +45,7 @@ export default function App() {
       </button>
 
       {/* Overlay */}
-      {sidebarOpen && (
+      {sidebarOpen && window.innerWidth <= 768 && (
         <div
           onClick={() => setSidebarOpen(false)}
           style={{
@@ -104,7 +104,12 @@ export default function App() {
       </nav>
 
       {/* Main content */}
-      <main className="main" style={{marginLeft:0, width:'100%', paddingTop:'64px'}}>
+      <main className="main" style={{
+  marginLeft: sidebarOpen && window.innerWidth > 768 ? '240px' : '0',
+  width: sidebarOpen && window.innerWidth > 768 ? 'calc(100% - 240px)' : '100%',
+  paddingTop:'64px',
+  transition:'all 0.3s ease'
+}}>
         <div className="page-enter" key={page}>
           {page === 'dashboard' && <Dashboard setPage={setPage} />}
           {page === 'products' && <Products />}
