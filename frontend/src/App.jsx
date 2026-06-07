@@ -14,7 +14,7 @@ const nav = [
 
 export default function App() {
   const [page, setPage] = useState('dashboard')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const navigate = (id) => {
     setPage(id)
