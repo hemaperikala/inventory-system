@@ -5,7 +5,6 @@ const API = 'https://inventory-system-k8a4.onrender.com'
 export default function Dashboard({ setPage }) {
   const [stats, setStats] = useState({ products:0, customers:0, orders:0, revenue:0 })
   const [lowStock, setLowStock] = useState([])
-  const [recentOrders, setRecentOrders] = useState([])
 
   useEffect(() => {
     Promise.all([
@@ -16,15 +15,14 @@ export default function Dashboard({ setPage }) {
       const rev = o.data.reduce((s,x) => s+(x.total_price||0), 0)
       setStats({ products:p.data.length, customers:c.data.length, orders:o.data.length, revenue:rev })
       setLowStock(p.data.filter(x => x.stock <= 5))
-      setRecentOrders(o.data.slice(-5).reverse())
     }).catch(()=>{})
   }, [])
 
   const cards = [
-    { label:'Total Products', value:stats.products, icon:'📦', accent:'#6366f1', glow:'rgba(99,102,241,0.3)', bg:'rgba(99,102,241,0.1)' },
-    { label:'Total Customers', value:stats.customers, icon:'👥', accent:'#10b981', glow:'rgba(16,185,129,0.3)', bg:'rgba(16,185,129,0.1)' },
-    { label:'Total Orders', value:stats.orders, icon:'🛒', accent:'#f59e0b', glow:'rgba(245,158,11,0.3)', bg:'rgba(245,158,11,0.1)' },
-    { label:'Total Revenue', value:`₹${stats.revenue.toFixed(0)}`, icon:'💰', accent:'#06b6d4', glow:'rgba(6,182,212,0.3)', bg:'rgba(6,182,212,0.1)' },
+    { label:'Total Products', page:'products', value:stats.products, icon:'📦', accent:'#6366f1', glow:'rgba(99,102,241,0.3)', bg:'rgba(99,102,241,0.1)' },
+    { label:'Total Customers', page:'customers', value:stats.customers, icon:'👥', accent:'#10b981', glow:'rgba(16,185,129,0.3)', bg:'rgba(16,185,129,0.1)' },
+    { label:'Total Orders', page:'orders', value:stats.orders, icon:'🛒', accent:'#f59e0b', glow:'rgba(245,158,11,0.3)', bg:'rgba(245,158,11,0.1)' },
+    { label:'Total Revenue', page:'orders', value:`₹${stats.revenue.toFixed(0)}`, icon:'💰', accent:'#06b6d4', glow:'rgba(6,182,212,0.3)', bg:'rgba(6,182,212,0.1)' },
   ]
 
   return (
@@ -37,7 +35,7 @@ export default function Dashboard({ setPage }) {
       <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'16px', marginBottom:'28px'}}>
         {cards.map(c => (
           <div key={c.label} className="stat-card" style={{'--accent':c.accent,'--glow':c.glow}}
-            onClick={() => setPage(c.label.split(' ')[1].toLowerCase()+'s')}>
+            onClick={() => setPage(c.page)}>
             <div className="icon-box" style={{background:c.bg, fontSize:'24px'}}>{c.icon}</div>
             <div style={{fontSize:'32px', fontWeight:'800', color:c.accent, letterSpacing:'-1px'}}>{c.value}</div>
             <div style={{fontSize:'13px', color:'#475569', marginTop:'4px', fontWeight:'500'}}>{c.label}</div>
