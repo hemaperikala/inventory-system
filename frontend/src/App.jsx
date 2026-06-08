@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Products from './pages/Products'
 import Customers from './pages/Customers'
 import Orders from './pages/Orders'
@@ -14,11 +14,18 @@ const nav = [
 
 export default function App() {
   const [page, setPage] = useState('dashboard')
-  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const navigate = (id) => {
     setPage(id)
-    setSidebarOpen(false)
+    if (isMobile) setSidebarOpen(false)
   }
 
   return (
@@ -33,7 +40,7 @@ export default function App() {
           borderRadius:'10px', width:'40px', height:'40px',
           display:'flex', flexDirection:'column', alignItems:'center',
           justifyContent:'center', gap:'5px', cursor:'pointer',
-          backdropFilter:'blur(10px)', transition:'all 0.2s'
+          backdropFilter:'blur(10px)'
         }}
       >
         <span style={{width:'18px', height:'2px', background:'#e2e8f0', borderRadius:'2px', transition:'all 0.3s',
@@ -44,14 +51,13 @@ export default function App() {
           transform: sidebarOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none'}}></span>
       </button>
 
-      {/* Overlay */}
-      {sidebarOpen && window.innerWidth <= 768 && (
+      {/* Overlay - mobile only */}
+      {sidebarOpen && isMobile && (
         <div
           onClick={() => setSidebarOpen(false)}
           style={{
             position:'fixed', inset:0, background:'rgba(0,0,0,0.5)',
-            zIndex:998, backdropFilter:'blur(2px)',
-            animation:'fadeIn 0.2s ease'
+            zIndex:998, backdropFilter:'blur(2px)'
           }}
         />
       )}
@@ -67,19 +73,14 @@ export default function App() {
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
             <div className="logo-box">📦</div>
             <div>
-              <div style={{fontWeight:'800', fontSize:'15px', color:'#e2e8f0', letterSpacing:'-0.3px'}}>InvenPro</div>
+              <div style={{fontWeight:'800', fontSize:'15px', color:'#e2e8f0'}}>InvenPro</div>
               <div style={{fontSize:'11px', color:'#64748b', fontWeight:'500'}}>Management System</div>
             </div>
-            {/* Close button inside sidebar */}
-            <button
-              onClick={() => setSidebarOpen(false)}
-              style={{
-                marginLeft:'auto', background:'rgba(255,255,255,0.05)',
+            <button onClick={() => setSidebarOpen(false)}
+              style={{marginLeft:'auto', background:'rgba(255,255,255,0.05)',
                 border:'1px solid rgba(255,255,255,0.1)', borderRadius:'8px',
                 width:'28px', height:'28px', cursor:'pointer', color:'#94a3b8',
-                fontSize:'16px', display:'flex', alignItems:'center', justifyContent:'center'
-              }}
-            >✕</button>
+                fontSize:'16px', display:'flex', alignItems:'center', justifyContent:'center'}}>✕</button>
           </div>
         </div>
 
@@ -105,11 +106,12 @@ export default function App() {
 
       {/* Main content */}
       <main className="main" style={{
-  marginLeft: sidebarOpen && window.innerWidth > 768 ? '240px' : '0',
-  width: sidebarOpen && window.innerWidth > 768 ? 'calc(100% - 240px)' : '100%',
-  paddingTop:'64px',
-  transition:'all 0.3s ease'
-}}>
+        marginLeft: sidebarOpen && !isMobile ? '240px' : '0',
+        width: sidebarOpen && !isMobile ? 'calc(100% - 240px)' : '100%',
+        paddingTop:'64px',
+        transition:'all 0.3s ease',
+        minHeight:'100vh'
+      }}>
         <div className="page-enter" key={page}>
           {page === 'dashboard' && <Dashboard setPage={setPage} />}
           {page === 'products' && <Products />}
